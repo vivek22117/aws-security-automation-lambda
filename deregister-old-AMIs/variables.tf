@@ -10,7 +10,7 @@ variable "environment" {
 }
 
 variable "schedule_expression" {
-  type = "string"
+  type        = "string"
   description = "Expression for lambda scheduler"
 }
 
@@ -25,7 +25,7 @@ locals {
   common_tags = {
     owner       = "Vivek"
     team        = "TeamConcept"
-    environment = "${var.environment}"
+    environment = var.environment
   }
 }
 

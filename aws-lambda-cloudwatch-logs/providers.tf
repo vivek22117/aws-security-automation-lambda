@@ -1,8 +1,8 @@
 provider "aws" {
-  region  = var.default_region // Interpolation Syntax
+  region  = var.aws_region
   profile = var.profile
 
-  version = "2.17.0" // AWS plugin version
+  version = "2.17.0"
 }
 
 provider "archive" {
@@ -17,10 +17,10 @@ terraform {
   required_version = ">= 0.12" // Terraform version
 
   backend "s3" {
-    profile        = "doubledigit"
+    profile        = "admin"
     bucket         = "teamconcept-tfstate-dev-us-east-1"
     dynamodb_table = "teamconcept-tfstate-dev-us-east-1"
-    key            = "state/dev/lambda/ami-deregister/terraform.tfstate"
+    key            = "state/dev/lambda/cloudwatch-logs/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = "true"
   }

@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_policy" "ami_deregister_policy" {
-  name        = "ami-deregister-policy"
+  name = "ami-deregister-policy"
   description = "Policy to access EC2 AMIs"
   path = "/"
   policy = <<EOF
@@ -50,7 +50,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "policy_role_attach" {
-  policy_arn = "${aws_iam_policy.ami_deregister_policy.arn}"
-  role = "${aws_iam_role.ami_deregister_role.name}"
+  policy_arn = aws_iam_policy.ami_deregister_policy.arn
+  role       = aws_iam_role.ami_deregister_role.name
 }
 
