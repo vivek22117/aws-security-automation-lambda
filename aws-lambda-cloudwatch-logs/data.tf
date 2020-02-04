@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "lambda_cloudwatch_policy_doc" {
     ]
 
     resources = [
-      aws_cloudwatch_log_group.lambda_cloudwatch_logGroup.arn
+      "arn:aws:logs:*:*:*"
     ]
   }
 }
