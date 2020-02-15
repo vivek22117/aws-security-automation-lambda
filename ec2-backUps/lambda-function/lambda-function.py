@@ -15,11 +15,11 @@ def lambda_handler(event, context):
 
         instances = ec2.instances.filter(
             Filters=[
-                {'Name': 'tag:backup', 'Values': ['true']}
+                {'Name': 'tag:component', 'Values': ['security']}
             ]
         )
 
-        timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
+        timestamp = datetime.datetime.utcnow().replace(microsecond=0).isoformat()
 
         for i in instances.all():
             for v in i.volumes.all():

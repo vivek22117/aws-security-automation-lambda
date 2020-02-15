@@ -20,7 +20,7 @@ terraform {
     profile        = "admin"
     bucket         = "doubledigit-tfstate-dev-us-east-1"
     dynamodb_table = "doubledigit-tfstate-dev-us-east-1"
-    key            = "state/dev/lambda/ami-deregister/terraform.tfstate"
+    key            = "state/dev/lambda/delete-untagged-resources/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = "true"
   }

@@ -1,3 +1,4 @@
+# noinspection PyInterpreter
 import boto3
 import json
 

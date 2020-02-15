@@ -1,4 +1,4 @@
-resource "aws_iam_role" "ec2_cleanup_role" {
+resource "aws_iam_role" "ami_deregister_role" {
   name = var.lambda_role
 
   assume_role_policy = <<EOF
@@ -18,9 +18,9 @@ resource "aws_iam_role" "ec2_cleanup_role" {
 EOF
 }
 
-resource "aws_iam_policy" "ec2_cleanup_policy" {
+resource "aws_iam_policy" "ami_deregister_policy" {
   name        = var.lambda_policy
-  description = "Policy to access EC2 for cleaning up of snapshots"
+  description = "Policy to have delete access"
   path        = "/"
   policy      = <<EOF
 {
@@ -38,12 +38,8 @@ resource "aws_iam_policy" "ec2_cleanup_policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "ec2:CreateSnapshot",
-        "ec2:CreateTags",
-        "ec2:DeleteSnapshot",
+        "ec2:Delete*",
         "ec2:Describe*",
-        "ec2:ModifySnapshotAttribute",
-        "ec2:ResetSnapshotAttribute"
       ],
       "Resource": "*"
     }
@@ -53,7 +49,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "policy_role_attach" {
-  policy_arn = aws_iam_policy.ec2_cleanup_policy.arn
-  role       = aws_iam_role.ec2_cleanup_role.name
+  policy_arn = aws_iam_policy.ami_deregister_policy.arn
+  role       = aws_iam_role.ami_deregister_role.name
 }
 

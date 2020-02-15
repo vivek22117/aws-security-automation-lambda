@@ -9,7 +9,7 @@ def lambda_handler(event, context):
                for region in ec2.describe_regions()['Regions']]
 
     for region in regions:
-        print("Region:", region)
+        print('Region:', region)
         ec2 = boto3.client('ec2', region_name=region)
         response = ec2.describe_snapshots(OwnerIds=[account_id])
         snapshots = response["Snapshots"]
