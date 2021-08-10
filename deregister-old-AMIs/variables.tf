@@ -1,9 +1,4 @@
 #####======================Global Variables=================================######
-variable "profile" {
-  type        = string
-  description = "AWS Profile name for credentials"
-}
-
 variable "environment" {
   type        = string
   description = "Environment to be configured 'dev', 'qa', 'prod'"
@@ -48,6 +43,12 @@ variable "lambda_role" {
 variable "lambda_policy" {
   type        = string
   description = "Name of the lambda access IAM policy"
+}
+
+variable "s3_lambda_bucket_key" {
+  type        = string
+  description = "rsvp lambda jar s3 key"
+  default     = "lambda/deregister-ami-lambda/ami-deregister-lambda.zip"
 }
 
 
