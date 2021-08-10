@@ -19,15 +19,15 @@ def lambda_handler(event, context):
         ec2 = boto3.client('ec2', region_name=region)
         print('Region: ', region)
 
-        amis = ec2.describe_images(Owners=['self'])['Images']
+        all_ami = ec2.describe_images(Owners=['self'])['Images']
 
-        for ami in amis:
+        for ami in all_ami:
             creation_date = ami['CreationDate']
             age_days = days_old(creation_date)
             image_id = ami['ImageId']
             print('ImageId: {}, CreationDate: {} ({} days old)'.format(image_id, creation_date, age_days))
 
-            if age_days >= 2:
+            if age_days >= 5:
                 print('Deleting imageId: ', image_id)
 
                 ec2.deregister_image(ImageId=image_id)
