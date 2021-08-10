@@ -1,27 +1,52 @@
+####################################################
+# AWS provider configuration                       #
+####################################################
 provider "aws" {
-  region  = var.default_region // Interpolation Syntax
-  profile = var.profile
+  region  = var.default_region
 
-  version = ">=2.22" // AWS plugin version
 }
 
-provider "archive" {
-  version = "1.2.2"
-}
 
-#############################################################
-# Terraform configuration block is used to define backend   #
-# Interpolation sytanx is not allowed in Backend            #
-#############################################################
+###########################################################
+# Terraform configuration block is used to define backend #
+# Interpolation syntax is not allowed in Backend          #
+###########################################################
 terraform {
-  required_version = ">= 0.12" // Terraform version
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">=3.3.0"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 1.3"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 2.0"
+    }
+    template = {
+      source  = "hashicorp/template"
+      version = "~> 2.0"
+    }
+    archive = {
+      source = "hashicorp/archive"
+      version = "2.2.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.0.0"
+    }
+  }
+  required_version = ">= 0.13"
+
 
   backend "s3" {
-    profile        = "admin"
-    bucket         = "doubledigit-tfstate-dev-us-east-1"
-    dynamodb_table = "doubledigit-tfstate-dev-us-east-1"
-    key            = "state/dev/lambda/ami-deregister/terraform.tfstate"
-    region         = "us-east-1"
-    encrypt        = "true"
+    region  = "us-east-1"
+    encrypt = "true"
   }
+
 }
+
+# used for accessing Account ID and ARN
+data "aws_caller_identity" "current" {}
