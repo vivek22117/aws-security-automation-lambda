@@ -1,6 +1,16 @@
-data "archive_file" "ami_deregister" {
-  //source_content          = "${data.template_file.lambda_source.rendered}"
+##########################################################
+# Adding the lambda archive to the defined bucket        #
+##########################################################
+resource "aws_s3_bucket_object" "ami_deregister_package" {
+  depends_on = [data.archive_file.ami_deregister]
 
+  bucket = data.terraform_remote_state.s3_buckets.outputs.artifactory_s3_name
+  key    = var.s3_lambda_bucket_key
+  source = "${path.module}/lambda-function/ami-deregister-lambda.zip"
+  etag   = filemd5("${path.module}/lambda-function/ami-deregister-lambda.zip")
+}
+
+data "archive_file" "ami_deregister" {
   type        = "zip"
   source_file = "lambda-function/lambda-function.py"
   output_path = "lambda-function/ami-deregister-lambda.zip"
@@ -13,7 +23,9 @@ resource "aws_lambda_function" "ami_deregister" {
   function_name = var.lambda_func_name
   handler       = var.lambda_handler
 
-  filename         = data.archive_file.ami_deregister.output_path
+  s3_bucket = aws_s3_bucket_object.ami_deregister_package.bucket
+  s3_key    = aws_s3_bucket_object.ami_deregister_package.key
+
   source_code_hash = data.archive_file.ami_deregister.output_base64sha256
   role             = aws_iam_role.ami_deregister_role.arn
 
