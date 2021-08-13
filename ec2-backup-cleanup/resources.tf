@@ -1,6 +1,16 @@
-data "archive_file" "ec2-cleanup" {
-  //source_content          = "${data.template_file.lambda_source.rendered}"
+##########################################################
+# Adding the lambda archive to the defined bucket        #
+##########################################################
+resource "aws_s3_bucket_object" "ec2_snapshot_cleanup_package" {
+  depends_on = [data.archive_file.ec2_snapshot_cleanup]
 
+  bucket = data.terraform_remote_state.s3_buckets.outputs.artifactory_s3_name
+  key    = var.s3_lambda_bucket_key
+  source = "${path.module}/lambda-function/ec2-backup-cleanup.zip"
+  etag   = filemd5("${path.module}/lambda-function/ec2-backup-cleanup.zip")
+}
+
+data "archive_file" "ec2_snapshot_cleanup" {
   type        = "zip"
   source_file = "lambda-function/lambda-function.py"
   output_path = "lambda-function/ec2-backup-cleanup.zip"
@@ -13,8 +23,10 @@ resource "aws_lambda_function" "ec2_cleanup" {
   function_name = var.lambda_func_name
   handler       = var.lambda_handler
 
-  filename         = data.archive_file.ec2-cleanup.output_path
-  source_code_hash = data.archive_file.ec2-cleanup.output_base64sha256
+  s3_bucket = aws_s3_bucket_object.ec2_snapshot_cleanup_package.bucket
+  s3_key    = aws_s3_bucket_object.ec2_snapshot_cleanup_package.key
+  source_code_hash = data.archive_file.ec2_snapshot_cleanup.output_base64sha256
+
   role             = aws_iam_role.ec2_cleanup_role.arn
 
   memory_size = var.lambda_memory
