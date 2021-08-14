@@ -1,7 +1,17 @@
-data "aws_caller_identity" "identity" {}
+##########################################################
+# Adding the lambda archive to the defined bucket        #
+##########################################################
+resource "aws_s3_bucket_object" "ec2_start_stop_package" {
+  depends_on = [data.archive_file.ec2-start-stop]
+
+  bucket = data.terraform_remote_state.s3_buckets.outputs.artifactory_s3_name
+  key    = var.s3_lambda_bucket_key
+  source = "${path.module}/lambda-function/ec2-start-stop.zip"
+  etag   = filemd5("${path.module}/lambda-function/ec2-start-stop.zip")
+}
+
 
 data "archive_file" "ec2-start-stop" {
-  //source_content          = "${data.template_file.lambda_source.rendered}"
 
   type        = "zip"
   source_file = "lambda-function/lambda-function.py"
@@ -14,7 +24,8 @@ resource "aws_lambda_function" "ec2_start_stop" {
   function_name = var.lambda_func_name
   handler       = var.lambda_handler
 
-  filename         = data.archive_file.ec2-start-stop.output_path
+  s3_bucket = aws_s3_bucket_object.ec2_start_stop_package.bucket
+  s3_key    = aws_s3_bucket_object.ec2_start_stop_package.key
   source_code_hash = data.archive_file.ec2-start-stop.output_base64sha256
   role             = aws_iam_role.ec2_start_stop_role.arn
 
