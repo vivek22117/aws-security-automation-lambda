@@ -50,6 +50,11 @@ variable "lambda_policy" {
   description = "Name of the lambda access IAM policy"
 }
 
+variable "s3_lambda_bucket_key" {
+  type        = string
+  description = "rsvp lambda jar s3 key"
+  default     = "lambda/ec2-start-stop/ec2-backup-cleanup.zip"
+}
 
 #####============================Default Variables==========================#####
 variable "default_region" {
