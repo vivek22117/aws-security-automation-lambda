@@ -16,5 +16,3 @@ locals {
   s3_name = data.terraform_remote_state.s3.outputs.cloudtrail_s3_name
 }
 
-
-data "aws_caller_identity" "current" {}
