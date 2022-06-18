@@ -1,9 +1,4 @@
 #####======================Global Variables=================================######
-variable "profile" {
-  type        = string
-  description = "AWS Profile name for credentials"
-}
-
 variable "environment" {
   type        = string
   description = "Environment to be configured 'dev', 'qa', 'prod'"
@@ -54,25 +49,14 @@ variable "lambda_policy" {
 #####============================Default Variables==========================#####
 variable "default_region" {
   type    = string
-  default = "us-east-1"
-}
-
-variable "dyanamoDB_prefix" {
-  type    = string
-  default = "doubledigit-tfstate"
-}
-
-variable "s3_bucket_prefix" {
-  type    = string
-  default = "doubledigit-tfstate"
 }
 
 #####========================Local variables=======================#####
 locals {
   common_tags = {
     owner       = "Vivek"
-    team        = "DoubleDigit"
-    component   = "security"
+    team        = "DD-Team"
+    component   = "Security"
     environment = var.environment
   }
 }

@@ -1,5 +1,4 @@
-profile = "admin"
-
+default_region = "us-east-1"
 
 lambda_func_name    = "CloudTrailMonitoringLambda"
 lambda_handler      = "lambda-function.lambda_handler"
