@@ -16,3 +16,10 @@ locals {
   s3_name = data.terraform_remote_state.s3.outputs.cloudtrail_s3_name
 }
 
+data "template_file" "lambda_policy_template" {
+  template = file("${path.module}/policy-doc/lambda-access-policy.json")
+
+  vars = {
+    s3_arn = local.s3_arn
+  }
+}

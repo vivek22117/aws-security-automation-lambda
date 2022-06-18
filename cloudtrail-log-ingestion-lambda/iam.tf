@@ -22,40 +22,7 @@ resource "aws_iam_policy" "cloudtrail_monitoring_lambda_policy" {
   name        = var.lambda_policy
   description = "Policy to have delete access"
   path        = "/"
-  policy      = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Resource": "arn:aws:logs:*:*:*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:GetObjectVersion",
-      ],
-      "Resource": "${local.s3_arn}"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:ListBucket"
-      ],
-      "Resource":[
-        "${local.s3_arn}",
-        "${local.s3_arn}/*"
-      ]
-    }
-  ]
-}
-EOF
+  policy      = data.template_file.lambda_policy_template.rendered
 }
 
 resource "aws_iam_role_policy_attachment" "policy_role_attach" {
