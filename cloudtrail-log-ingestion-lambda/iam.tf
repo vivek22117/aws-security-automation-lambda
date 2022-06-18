@@ -43,11 +43,13 @@ resource "aws_iam_policy" "cloudtrail_monitoring_lambda_policy" {
       ],
       "Resource": "${local.s3_arn}"
     },
-   {
+    {
       "Effect": "Allow",
-      "Action": ["s3:ListBucket"],
+      "Action": [
+        "s3:ListBucket"
+      ],
       "Resource":[
-        ${local.s3_arn}",
+        "${local.s3_arn}",
         "${local.s3_arn}/*"
       ]
     }
