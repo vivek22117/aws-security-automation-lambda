@@ -39,7 +39,7 @@ def lambda_handler(event, context):
                 print('errorCode: ' + detail['errorCode'])
             if detail['errorMessage']:
                 print('error message: ' + detail['errorMessage'])
-            return false
+            return False
 
         if event_name == 'CreateVolume':
             resource_ids.append(detail['responseElements']['volumeId'])
@@ -52,7 +52,7 @@ def lambda_handler(event, context):
             print(resource_ids)
             print('number of instances: ' + str(len(resource_ids)))
 
-            ec2_list =  ec2.instances.filter(InstancesIds=resource_ids)
+            ec2_list = ec2.instances.filter(InstancesIds=resource_ids)
 
             # loop through the instances
             for instance in ec2_list:
